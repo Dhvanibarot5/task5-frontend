@@ -1,6 +1,7 @@
 import React from "react";
 import { HiBars3BottomRight } from "react-icons/hi2";
 import { RiCloseCircleLine } from "react-icons/ri";
+import { Link } from "react-router-dom";
 
 function MobileNav({ menuItems, Logo, onClose, hideLeft, onOpen }) {
   return (
@@ -16,6 +17,18 @@ function MobileNav({ menuItems, Logo, onClose, hideLeft, onOpen }) {
         <button onClick={onClose} className="absolute right-8 top-32">
           <RiCloseCircleLine className="w-7 h-7" />
         </button>
+
+        <div>
+          <ul className="flex flex-col gap-5">
+            {menuItems?.map((menu, index) => (
+              <li key={index}>
+                <Link to={menu} className="font-medium capitalize text-secondary text-2xl">
+                  {menu}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );

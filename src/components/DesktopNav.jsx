@@ -20,10 +20,10 @@ function DesktopNav({ menuItems, Logo }) {
       {/* buttons */}
       <ul className="flex gap-4 items-center font-medium">
         <li>
-          <button className="text-secondary px-4 py-2 rounded">Log In</button>
+          <button className="text-secondary px-4 py-2 rounded border">Log In</button>
         </li>
         <li>
-          <button className="text-secondary px-4 py-2 rounded">Sign Up</button>
+          <button className="text-secondary px-4 py-2 rounded border">Sign Up</button>
         </li>
       </ul>
     </div>
