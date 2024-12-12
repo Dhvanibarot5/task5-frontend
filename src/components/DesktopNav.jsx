@@ -1,13 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Logo from "../assets/images/logo.webp";
 
-function DesktopNav({ menuItems, Logo }) {
+function DesktopNav({ menuItems }) {
   const updatedMenuItems = [...menuItems];
 
   return (
     <div className="h-16 flex justify-between items-center px-6 lg:px-12">
       <a href="/">
-        <img src={Logo} alt="logo" />
+        <img src={Logo} alt="logo" width="150px"/>
       </a>
       <ul className="flex gap-7">
         {updatedMenuItems?.map((menu, index) => (
