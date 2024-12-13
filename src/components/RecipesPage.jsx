@@ -4,27 +4,23 @@ const RecipeApp = () => {
   const [recipes, setRecipes] = useState(() => {
     const savedRecipes = localStorage.getItem("recipes");
     return savedRecipes ? JSON.parse(savedRecipes) : [];
-  }); // State to store recipes
-  const [recipe, setRecipe] = useState({ name: "", ingredients: "", image: null }); // State for form inputs
-  const [isEditing, setIsEditing] = useState(false); // Editing state
-  const [editIndex, setEditIndex] = useState(null); // Index of the recipe being edited
-  const [isFormVisible, setIsFormVisible] = useState(false); // State for toggling form visibility
+  });
+  const [recipe, setRecipe] = useState({ name: "", ingredients: "", image: null });
+  const [isEditing, setIsEditing] = useState(false);
+  const [editIndex, setEditIndex] = useState(null);
+  const [isFormVisible, setIsFormVisible] = useState(false);
 
-  // Persist recipes to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem("recipes", JSON.stringify(recipes));
   }, [recipes]);
 
-  // Handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setRecipe({ ...recipe, [name]: value });
   };
 
-  // Handle image upload
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
-
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
@@ -35,30 +31,22 @@ const RecipeApp = () => {
     }
   };
 
-  // Add a new recipe
   const addRecipe = (e) => {
     e.preventDefault();
     if (!recipe.name || !recipe.ingredients) return;
-    try {
-      const updatedRecipes = [...recipes, recipe];
-      localStorage.setItem("recipes", JSON.stringify(updatedRecipes));
-      setRecipes(updatedRecipes);
-      setRecipe({ name: "", ingredients: "", image: null });
-      setIsFormVisible(false); // Hide the form after adding
-    } catch (error) {
-      console.error("Failed to add recipe:", error);
-    }
+    const updatedRecipes = [...recipes, recipe];
+    setRecipes(updatedRecipes);
+    setRecipe({ name: "", ingredients: "", image: null });
+    setIsFormVisible(false);
   };
 
-  // Edit a recipe
   const editRecipe = (index) => {
     setIsEditing(true);
     setEditIndex(index);
     setRecipe(recipes[index]);
-    setIsFormVisible(true); // Show the form for editing
+    setIsFormVisible(true);
   };
 
-  // Update a recipe
   const updateRecipe = (e) => {
     e.preventDefault();
     if (!recipe.name || !recipe.ingredients) return;
@@ -67,86 +55,88 @@ const RecipeApp = () => {
     setIsEditing(false);
     setRecipe({ name: "", ingredients: "", image: null });
     setEditIndex(null);
-    setIsFormVisible(false); // Hide the form after updating
+    setIsFormVisible(false);
   };
 
-  // Delete a recipe
   const deleteRecipe = (index) => {
     const filteredRecipes = recipes.filter((_, i) => i !== index);
     setRecipes(filteredRecipes);
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <div className="max-w-2xl mx-auto bg-white rounded-lg shadow p-6">
-        <h1 className="text-2xl font-bold mb-4">Recipe Manager</h1>
+    <div className="min-h-screen bg-gradient-to-br from-green-100 via-teal-200 to-blue-300 p-6">
+      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-xl p-8">
+        <h1 className="text-4xl font-extrabold text-center text-green-700 mb-8">Recipe Manager</h1>
 
-        {/* Button to toggle form */}
         <button
           onClick={() => setIsFormVisible(!isFormVisible)}
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 mb-6"
+          className="w-full bg-gradient-to-r from-green-400 via-teal-400 to-blue-500 text-white py-2 px-6 rounded-xl shadow-md hover:bg-gradient-to-r hover:from-green-500 hover:to-blue-600 transition duration-300"
         >
           {isFormVisible ? "Close Form" : isEditing ? "Edit Recipe" : "Add Recipe"}
         </button>
 
-        {/* Form */}
+        {/* Form for adding/editing recipes */}
         {isFormVisible && (
-          <form onSubmit={isEditing ? updateRecipe : addRecipe} className="mb-6">
+          <form onSubmit={isEditing ? updateRecipe : addRecipe} className="mt-6 space-y-6">
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Recipe Name</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Recipe Name</label>
               <input
                 type="text"
                 name="name"
                 value={recipe.name}
                 onChange={handleInputChange}
-                className="w-full border px-3 py-2 rounded-lg"
+                className="w-full p-3 rounded-xl border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
                 placeholder="Enter recipe name"
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Ingredients</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Ingredients</label>
               <textarea
                 name="ingredients"
                 value={recipe.ingredients}
                 onChange={handleInputChange}
-                className="w-full border px-3 py-2 rounded-lg"
+                className="w-full p-3 rounded-xl border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
                 placeholder="Enter ingredients"
               ></textarea>
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Upload Image</label>
-              <input type="file" onChange={handleImageUpload} className="w-full border px-3 py-2 rounded-lg" />
+              <label className="block text-sm font-medium text-gray-700 mb-2">Upload Image</label>
+              <input
+                type="file"
+                onChange={handleImageUpload}
+                className="w-full p-3 rounded-xl border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
+              />
             </div>
             <button
               type="submit"
-              className={`w-full bg-${isEditing ? "yellow" : "blue"}-500 text-white py-2 px-4 rounded-lg hover:bg-${
-                isEditing ? "yellow" : "blue"
-              }-600`}
+              className="w-full bg-gradient-to-r from-green-400 via-teal-400 to-blue-500 text-white py-3 rounded-xl shadow-md hover:bg-gradient-to-r hover:from-green-500 hover:to-blue-600 transition duration-300"
             >
               {isEditing ? "Update Recipe" : "Add Recipe"}
             </button>
           </form>
         )}
 
-        {/* Recipes List */}
-        <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">Recipe List</h2>
+        <h2 className="text-2xl font-semibold text-center text-gray-800 mt-10 mb-6">Recipe List</h2>
         {recipes.length > 0 ? (
-          <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {recipes.map((r, index) => (
-              <li
-                key={index}
-                className="p-4 bg-white rounded-lg shadow-lg border border-gray-200 flex flex-col justify-between hover:shadow-xl transition-shadow"
-              >
+              <li key={index} className="bg-white p-6 rounded-xl shadow-lg transition-all duration-300 hover:scale-105">
                 <div>
-                  <h3 className="text-lg font-bold text-gray-800 mb-2 truncate">{r.name}</h3>
-                  <p className="text-sm text-gray-600 mb-3 line-clamp-2">{r.ingredients}</p>
+                  <h3 className="text-lg font-bold text-gray-800 mb-3 truncate">{r.name}</h3>
+                  <p className="text-sm text-gray-600 mb-4 line-clamp-3">{r.ingredients}</p>
                   {r.image && <img src={r.image} alt={r.name} className="w-full h-40 object-cover rounded-lg mb-3" />}
                 </div>
-                <div className="flex justify-between items-center mt-3">
-                  <button onClick={() => editRecipe(index)} className="bg-yellow-500 text-white py-1 px-3 rounded-lg hover:bg-yellow-600 text-sm">
+                <div className="flex justify-between items-center">
+                  <button
+                    onClick={() => editRecipe(index)}
+                    className="bg-yellow-500 text-white py-2 px-4 rounded-lg hover:bg-yellow-600 text-sm transition duration-300"
+                  >
                     Edit
                   </button>
-                  <button onClick={() => deleteRecipe(index)} className="bg-red-500 text-white py-1 px-3 rounded-lg hover:bg-red-600 text-sm">
+                  <button
+                    onClick={() => deleteRecipe(index)}
+                    className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 text-sm transition duration-300"
+                  >
                     Delete
                   </button>
                 </div>
